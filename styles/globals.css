@@ -78,4 +78,8 @@
     @apply bg-background text-foreground;
     font-feature-settings: "rlig" 1, "calt" 1;
   }
+
+  .content-area {
+    height: calc(99.5vh - theme(spacing.16));
+  }
 }

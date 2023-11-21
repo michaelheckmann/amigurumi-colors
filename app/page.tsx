@@ -1,38 +1,28 @@
-import Link from "next/link"
+"use client"
 
-import { siteConfig } from "@/config/site"
-import { buttonVariants } from "@/components/ui/button"
+import { useTemplate } from "@/lib/template-context"
+import { File } from "@/components/file"
+import { Pickers } from "@/components/pickers"
 
 export default function IndexPage() {
+  const { template } = useTemplate()
+
+  if (!template) {
+    return (
+      <section className="flex items-center justify-center content-area">
+        <div className="mb-4 italic text-muted-foreground">
+          Bitte wähle ein Template aus, um zu starten
+        </div>
+      </section>
+    )
+  }
   return (
-    <section className="container grid items-center gap-6 pb-8 pt-6 md:py-10">
-      <div className="flex max-w-[980px] flex-col items-start gap-2">
-        <h1 className="text-3xl font-extrabold leading-tight tracking-tighter md:text-4xl">
-          Beautifully designed components <br className="hidden sm:inline" />
-          built with Radix UI and Tailwind CSS.
-        </h1>
-        <p className="max-w-[700px] text-lg text-muted-foreground">
-          Accessible and customizable components that you can copy and paste
-          into your apps. Free. Open Source. And Next.js 13 Ready.
-        </p>
+    <section className="container flex justify-between gap-4 py-4 md:gap-16 lg:gap-32 content-area">
+      <div className="flex-1">
+        <File />
       </div>
-      <div className="flex gap-4">
-        <Link
-          href={siteConfig.links.docs}
-          target="_blank"
-          rel="noreferrer"
-          className={buttonVariants()}
-        >
-          Documentation
-        </Link>
-        <Link
-          target="_blank"
-          rel="noreferrer"
-          href={siteConfig.links.github}
-          className={buttonVariants({ variant: "outline" })}
-        >
-          GitHub
-        </Link>
+      <div className="min-w-[16em]">
+        <Pickers />
       </div>
     </section>
   )
