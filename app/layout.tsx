@@ -3,9 +3,7 @@ import { Metadata } from "next"
 
 import { siteConfig } from "@/config/site"
 import { fontSans } from "@/lib/fonts"
-import { TemplateProvider } from "@/lib/template-context"
 import { cn } from "@/lib/utils"
-import { SiteHeader } from "@/components/site-header"
 import { TailwindIndicator } from "@/components/tailwind-indicator"
 
 export const metadata: Metadata = {
@@ -40,12 +38,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
             fontSans.variable
           )}
         >
-          <TemplateProvider>
-            <div className="relative flex flex-col min-h-screen">
-              <SiteHeader />
-              <div className="flex-1">{children}</div>
-            </div>
-          </TemplateProvider>
+          {children}
           <TailwindIndicator />
         </body>
       </html>

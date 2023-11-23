@@ -13,7 +13,7 @@ const getThresholdArray = (size: number) => {
 }
 
 const getRGBs = (colorMap: Record<string, string>) => {
-  const tolerance = 10
+  const tolerance = 20
   const rgbs: Record<string, string> = {}
   Object.values(colorMap).map((hex) => {
     const { r, b, g } = hexToRgb(hex)
@@ -31,9 +31,9 @@ const getRGBs = (colorMap: Record<string, string>) => {
 export const computeIndizes = (
   canvas: MutableRefObject<HTMLCanvasElement | null>,
   imageDimensions: ImageDimensions | null,
-  colorMap?: Record<string, string>
+  colorMap: Record<string, string>
 ) => {
-  if (!imageDimensions || !canvas.current || !colorMap) {
+  if (!imageDimensions || !canvas.current) {
     return []
   }
 
@@ -57,7 +57,6 @@ export const computeIndizes = (
     hex: string
   }[] = []
 
-  // for (let i = 0; i < data.length; i += 4) {
   for (let i = 0; i < data.length; i += 4) {
     const r = data[i]
     const g = data[i + 1]
@@ -76,6 +75,5 @@ export const computeIndizes = (
       })
     }
   }
-
   return localIndizes
 }

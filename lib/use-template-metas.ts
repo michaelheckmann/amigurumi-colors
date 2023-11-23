@@ -2,9 +2,11 @@
 
 import { useEffect, useState } from "react"
 
-import { Templates } from "@/types/templates"
+import { TemplateMeta } from "@/types/templates"
 
-const DUMMY_DATA: Templates = [
+const MAKE_REQUEST = false && process.env.NODE_ENV === "development"
+
+const DUMMY_DATA: TemplateMeta[] = [
   {
     name: "Lupita",
     image: "abe5fe00-c003-4951-9ec7-5a454e8b0dc1",
@@ -17,21 +19,24 @@ const DUMMY_DATA: Templates = [
   },
 ]
 
-export const useTemplates = () => {
-  const [templates, setTemplates] = useState<Templates | null>(null)
+export const useTemplateMetas = () => {
+  const [templateMetas, setTemplateMetas] = useState<TemplateMeta[] | null>(
+    null
+  )
+
   useEffect(() => {
     const fetchData = async () => {
       const response = await fetch("/api/templates")
       const { data } = await response.json()
-      setTemplates(data)
+      setTemplateMetas(data)
     }
 
-    if (process.env.NODE_ENV !== "development") {
+    if (process.env.NODE_ENV !== "development" || MAKE_REQUEST) {
       fetchData()
     } else {
-      setTemplates(DUMMY_DATA)
+      setTemplateMetas(DUMMY_DATA)
     }
   }, [])
 
-  return templates
+  return templateMetas
 }

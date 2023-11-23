@@ -1,12 +1,10 @@
-export type TemplateMetaData = {
+export type TemplateMeta = {
   name: string
   image: string
   colors: {
     [key: string]: string
   }
 }
-
-export type Templates = TemplateMetaData[]
 
 export type TemplateImage = {
   id: string
@@ -16,4 +14,8 @@ export type TemplateImage = {
   sizeBytes: number
   base64Data: string
   url: string
+}
+
+export type Template = TemplateMeta & {
+  imageElement: HTMLImageElement
 }

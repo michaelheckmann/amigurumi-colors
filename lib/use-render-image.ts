@@ -3,8 +3,6 @@ import { useDebounce, useWindowSize } from "@uidotdev/usehooks"
 
 import { ImageDimensions } from "@/types/canvas"
 
-import { useLoadImage } from "./use-load-image"
-
 const drawImageScaled = (
   img: HTMLImageElement,
   ctx: CanvasRenderingContext2D
@@ -49,49 +47,43 @@ const drawImageScaled = (
   }
 }
 
-export const useRenderImage = () => {
+export const useRenderImage = (image: HTMLImageElement) => {
   const canvas = useRef<HTMLCanvasElement | null>(null)
   const [imageDimensions, setImageDimensions] =
     useState<ImageDimensions | null>(null)
 
-  const image = useLoadImage()
-
   // We use this as a resize observer
   const size = useWindowSize()
-  const debouncedSize = useDebounce(size, 200)
+  const debouncedSize = useDebounce(size, 100)
 
-  const draw = useCallback(
-    (img: HTMLImageElement) => {
-      if (!canvas.current) {
-        console.log("canvas or image not found")
-        return
-      }
+  const draw = useCallback(() => {
+    if (!canvas.current || !image) {
+      console.log("canvas or image not found")
+      return
+    }
 
-      canvas.current.width = canvas.current.offsetWidth
-      canvas.current.height = canvas.current.offsetHeight
+    canvas.current.width = canvas.current.offsetWidth
+    canvas.current.height = canvas.current.offsetHeight
 
-      const ctx = canvas.current.getContext("2d")
-      if (!ctx) {
-        console.log("failed to get context")
-        return
-      }
+    const ctx = canvas.current.getContext("2d")
+    if (!ctx) {
+      console.log("failed to get context")
+      return
+    }
 
-      const measuredImageDimensions = drawImageScaled(img, ctx)
-      setImageDimensions(measuredImageDimensions)
-      console.log("image loaded")
-    },
-    [canvas]
-  )
+    const measuredImageDimensions = drawImageScaled(image, ctx)
+    setImageDimensions(measuredImageDimensions)
+    // console.log("image loaded")
+  }, [canvas, image])
 
   useEffect(() => {
     if (canvas.current && image && debouncedSize) {
-      draw(image)
+      draw()
     }
   }, [image, draw, debouncedSize])
 
   return {
     canvas,
-    image,
     imageDimensions,
   }
 }

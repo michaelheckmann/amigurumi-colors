@@ -1,18 +1,30 @@
 "use client"
 
-import { useTemplate } from "@/lib/template-context"
+import { Dispatch, SetStateAction } from "react"
+
+import { TemplateMeta } from "@/types/templates"
 
 import { Button } from "./ui/button"
 import { Input } from "./ui/input"
 import { Label } from "./ui/label"
 import { ScrollArea } from "./ui/scroll-area"
 
-export const Pickers = () => {
-  const { template, colorMap, setColorMap, canvasDataUrl } = useTemplate()
+type Props = {
+  template: TemplateMeta
+  canvasDataUrl: string | null
+  colorMap: Record<string, string>
+  setColorMap: Dispatch<SetStateAction<Record<string, string>>>
+}
 
+export const Pickers = ({
+  template,
+  canvasDataUrl,
+  colorMap,
+  setColorMap,
+}: Props) => {
   const download = () => {
     const link = document.createElement("a")
-    link.download = `${template?.name}.png`
+    link.download = `${template.name}.png`
     link.href = canvasDataUrl ?? ""
     link.click()
   }
@@ -31,7 +43,7 @@ export const Pickers = () => {
               <Input
                 type="color"
                 id={key}
-                value={colorMap[value]}
+                value={colorMap[value] ?? ""}
                 onChange={(e) => {
                   setColorMap((prev) => ({
                     ...prev,

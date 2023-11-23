@@ -1,7 +1,10 @@
 "use client"
 
-import { useTemplate } from "@/lib/template-context"
-import { useTemplates } from "@/lib/use-templates"
+import React from "react"
+
+import { Template } from "@/types/templates"
+import { useGetTemplateImage } from "@/lib/use-template-image"
+import { useTemplateMetas } from "@/lib/use-template-metas"
 import {
   Select,
   SelectContent,
@@ -11,13 +14,29 @@ import {
 } from "@/components/ui/select"
 import { Logo } from "@/components/logo"
 
-export function SiteHeader() {
-  const templates = useTemplates()
-  const { setTemplate } = useTemplate()
+type Props = {
+  setSelectedTemplate: (template: Template | null) => void
+  setIsLoading: (isLoading: boolean) => void
+}
 
-  const handleSelect = (templateName: string) => {
+const SiteHeaderComponent = ({ setSelectedTemplate, setIsLoading }: Props) => {
+  const templates = useTemplateMetas()
+  const getTemplateImage = useGetTemplateImage()
+
+  const handleSelect = async (templateName: string) => {
+    setIsLoading(true)
     const template = templates?.find((t) => t.name === templateName)
-    setTemplate(template ?? null)
+    if (!template) {
+      setSelectedTemplate(null)
+      setIsLoading(false)
+      return
+    }
+    const imageElement = await getTemplateImage(template.image)
+    setSelectedTemplate({
+      ...template,
+      imageElement,
+    })
+    setIsLoading(false)
   }
 
   return (
@@ -40,3 +59,5 @@ export function SiteHeader() {
     </header>
   )
 }
+
+export const SiteHeader = React.memo(SiteHeaderComponent)

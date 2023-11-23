@@ -1,40 +1,25 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useCallback } from "react"
 
-import { TemplateImage } from "@/types/templates"
+const MAKE_REQUEST = false && process.env.NODE_ENV === "development"
 
-import { useTemplate } from "./template-context"
-
-export const useTemplateImage = () => {
-  const [templateImage, setTemplateImage] = useState<TemplateImage | null>(null)
-
-  const { template } = useTemplate()
-
-  useEffect(() => {
-    const fetchData = async (image: string) => {
-      const response = await fetch(`/api/images/${image}`)
+export const useGetTemplateImage = () => {
+  return useCallback(async (imageId: string) => {
+    let url = ""
+    if (process.env.NODE_ENV !== "development" || MAKE_REQUEST) {
+      const response = await fetch(`/api/images/${imageId}`)
       const { data } = await response.json()
-      setTemplateImage({
-        ...data,
-        url: `data:${data.type};base64,${data.base64Data}`,
-      })
+      url = `data:${data.type};base64,${data.base64Data}`
+    } else {
+      const data = getDummyData()
+      url = `data:${data.type};base64,${data.base64Data}`
     }
 
-    if (template) {
-      if (process.env.NODE_ENV !== "development") {
-        fetchData(template.image)
-      } else {
-        const data = getDummyData()
-        setTemplateImage({
-          ...data,
-          url: `data:${data.type};base64,${data.base64Data}`,
-        })
-      }
-    }
-  }, [template])
-
-  return templateImage
+    const img = new Image()
+    img.src = url
+    return img
+  }, [])
 }
 
 function getDummyData() {

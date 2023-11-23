@@ -1,24 +1,24 @@
 "use client"
 
-import { useEffect, useMemo } from "react"
+import React, { useEffect, useMemo } from "react"
 
+import { Template } from "@/types/templates"
 import { computeIndizes } from "@/lib/compute-indizes"
 import { hexToRgb } from "@/lib/hex-to-rgb"
-import { useTemplate } from "@/lib/template-context"
 import { useRenderImage } from "@/lib/use-render-image"
-import { cn } from "@/lib/utils"
 
-import { Icons } from "./icons"
+type Props = {
+  template: Template
+  colorMap: Record<string, string>
+  setCanvasDataUrl: (dataUrl: string | null) => void
+}
 
-type Props = {}
-
-export const File = ({}: Props) => {
-  const { canvas, image, imageDimensions } = useRenderImage()
-  const { template, colorMap, setCanvasDataUrl } = useTemplate()
+const FileComponent = ({ template, colorMap, setCanvasDataUrl }: Props) => {
+  const { canvas, imageDimensions } = useRenderImage(template.imageElement)
 
   const indizes = useMemo(() => {
-    return computeIndizes(canvas, imageDimensions, template?.colors)
-  }, [canvas, imageDimensions, template?.colors])
+    return computeIndizes(canvas, imageDimensions, template.colors)
+  }, [canvas, imageDimensions, template])
 
   useEffect(() => {
     if (!imageDimensions) {
@@ -41,7 +41,6 @@ export const File = ({}: Props) => {
     for (const { index, hex } of indizes) {
       const replacedHex = colorMap[hex]
       const { r, g, b } = hexToRgb(replacedHex)
-
       data[index] = r
       data[index + 1] = g
       data[index + 2] = b
@@ -49,19 +48,9 @@ export const File = ({}: Props) => {
 
     ctx.putImageData(imageData, imageDimensions.dx, imageDimensions.dy)
     setCanvasDataUrl(canvas.current?.toDataURL("image/png") ?? null)
-  }, [indizes, colorMap, imageDimensions, canvas, setCanvasDataUrl])
+  }, [colorMap, imageDimensions, canvas, setCanvasDataUrl, indizes])
 
-  return (
-    <div className="relative w-full h-full">
-      <canvas
-        ref={canvas}
-        className={cn("w-full h-full z-10 absolute", {
-          "opacity-100": !image,
-        })}
-      ></canvas>
-      <div className="absolute -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2">
-        <Icons.spinner className="w-10 h-10 animate-spin stroke-gray-200" />
-      </div>
-    </div>
-  )
+  return <canvas ref={canvas} className="w-full h-full"></canvas>
 }
+
+export const File = React.memo(FileComponent)
