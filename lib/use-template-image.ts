@@ -12,25 +12,29 @@ export const useTemplateImage = () => {
   const { template } = useTemplate()
 
   useEffect(() => {
-    const fetchData = async () => {
-      const response = await fetch(`/api/images/${template?.image}`)
+    const fetchData = async (image: string) => {
+      const response = await fetch(`/api/images/${image}`)
       const { data } = await response.json()
-      setTemplateImage(data)
+      setTemplateImage({
+        ...data,
+        url: `data:${data.type};base64,${data.base64Data}`,
+      })
     }
 
-    if (process.env.NODE_ENV !== "development" && template) {
-      fetchData()
-    } else {
-      setTemplateImage(getDummyData())
+    if (template) {
+      if (process.env.NODE_ENV !== "development") {
+        fetchData(template.image)
+      } else {
+        const data = getDummyData()
+        setTemplateImage({
+          ...data,
+          url: `data:${data.type};base64,${data.base64Data}`,
+        })
+      }
     }
   }, [template])
 
   return templateImage
-    ? {
-        ...templateImage,
-        url: `data:${templateImage.type};base64,${templateImage.base64Data}`,
-      }
-    : null
 }
 
 function getDummyData() {

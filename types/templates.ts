@@ -15,4 +15,5 @@ export type TemplateImage = {
   folderName: string | null
   sizeBytes: number
   base64Data: string
+  url: string
 }

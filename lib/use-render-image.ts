@@ -60,29 +60,32 @@ export const useRenderImage = () => {
   const size = useWindowSize()
   const debouncedSize = useDebounce(size, 200)
 
-  const draw = useCallback(() => {
-    if (!canvas.current || !image) {
-      console.log("canvas or image not found")
-      return
-    }
+  const draw = useCallback(
+    (img: HTMLImageElement) => {
+      if (!canvas.current) {
+        console.log("canvas or image not found")
+        return
+      }
 
-    canvas.current.width = canvas.current.offsetWidth
-    canvas.current.height = canvas.current.offsetHeight
+      canvas.current.width = canvas.current.offsetWidth
+      canvas.current.height = canvas.current.offsetHeight
 
-    const ctx = canvas.current.getContext("2d")
-    if (!ctx) {
-      console.log("failed to get context")
-      return
-    }
+      const ctx = canvas.current.getContext("2d")
+      if (!ctx) {
+        console.log("failed to get context")
+        return
+      }
 
-    const measuredImageDimensions = drawImageScaled(image, ctx)
-    setImageDimensions(measuredImageDimensions)
-    console.log("image loaded")
-  }, [canvas, image])
+      const measuredImageDimensions = drawImageScaled(img, ctx)
+      setImageDimensions(measuredImageDimensions)
+      console.log("image loaded")
+    },
+    [canvas]
+  )
 
   useEffect(() => {
     if (canvas.current && image && debouncedSize) {
-      draw()
+      draw(image)
     }
   }, [image, draw, debouncedSize])
 
