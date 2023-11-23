@@ -18,7 +18,7 @@ const DUMMY_DATA: Templates = [
 ]
 
 export const useTemplates = () => {
-  const [templates, setTemplates] = useState<Templates>(DUMMY_DATA)
+  const [templates, setTemplates] = useState<Templates | null>(null)
   useEffect(() => {
     const fetchData = async () => {
       const response = await fetch("/api/templates")
@@ -28,6 +28,8 @@ export const useTemplates = () => {
 
     if (process.env.NODE_ENV !== "development") {
       fetchData()
+    } else {
+      setTemplates(DUMMY_DATA)
     }
   }, [])
 

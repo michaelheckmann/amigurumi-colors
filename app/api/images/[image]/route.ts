@@ -10,7 +10,7 @@ export async function GET(
       body: JSON.stringify({
         image: params.image,
       }),
-      cache: "no-cache",
+      next: { revalidate: 3600 },
     })
     const { data } = await response.json()
     return NextResponse.json(

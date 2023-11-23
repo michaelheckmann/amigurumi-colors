@@ -7,9 +7,7 @@ import { TemplateImage } from "@/types/templates"
 import { useTemplate } from "./template-context"
 
 export const useTemplateImage = () => {
-  const [templateImage, setTemplateImage] = useState<TemplateImage>(
-    getDummyData()
-  )
+  const [templateImage, setTemplateImage] = useState<TemplateImage | null>(null)
 
   const { template } = useTemplate()
 
@@ -22,13 +20,17 @@ export const useTemplateImage = () => {
 
     if (process.env.NODE_ENV !== "development" && template) {
       fetchData()
+    } else {
+      setTemplateImage(getDummyData())
     }
   }, [template])
 
-  return {
-    ...templateImage,
-    url: `data:${templateImage.type};base64,${templateImage.base64Data}`,
-  }
+  return templateImage
+    ? {
+        ...templateImage,
+        url: `data:${templateImage.type};base64,${templateImage.base64Data}`,
+      }
+    : null
 }
 
 function getDummyData() {

@@ -16,7 +16,7 @@ export function SiteHeader() {
   const { setTemplate } = useTemplate()
 
   const handleSelect = (templateName: string) => {
-    const template = templates.find((t) => t.name === templateName)
+    const template = templates?.find((t) => t.name === templateName)
     setTemplate(template ?? null)
   }
 
@@ -29,7 +29,7 @@ export function SiteHeader() {
             <SelectValue placeholder="Wähle ein Template" />
           </SelectTrigger>
           <SelectContent>
-            {templates.map(({ name }) => (
+            {(templates ?? []).map(({ name }) => (
               <SelectItem key={name} value={name}>
                 {name}
               </SelectItem>
