@@ -11,10 +11,10 @@ const DUMMY_DATA: TemplateMeta[] = [
     name: "Lupita",
     image: "abe5fe00-c003-4951-9ec7-5a454e8b0dc1",
     colors: {
-      Körper: "#906252",
-      Hose: "#C9696B",
-      "Akzent 1": "#5DA8E0",
-      "Akzent 2": "#FDE047",
+      Körper: "#ffff00",
+      Hose: "#00ff00",
+      "Akzent 1": "#0000ff",
+      "Akzent 2": "#ff0000",
     },
   },
 ]

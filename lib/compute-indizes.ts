@@ -4,28 +4,22 @@ import { ImageDimensions } from "@/types/canvas"
 
 import { hexToRgb } from "./hex-to-rgb"
 
-const getThresholdArray = (size: number) => {
-  return [
-    ...Array(size)
-      .fill(0)
-      .map((_, i) => i - size / 2),
-  ]
+const THRESHOLD = 150
+
+const isInRange = (a: number, b: number) => {
+  return Math.abs(a - b) < THRESHOLD
 }
 
-const getRGBs = (colorMap: Record<string, string>) => {
-  const tolerance = 20
-  const rgbs: Record<string, string> = {}
-  Object.values(colorMap).map((hex) => {
-    const { r, b, g } = hexToRgb(hex)
-    getThresholdArray(tolerance).map((rOffset) => {
-      getThresholdArray(tolerance).map((gOffset) => {
-        getThresholdArray(tolerance).map((bOffset) => {
-          rgbs[`${r + rOffset}-${g + gOffset}-${b + bOffset}`] = hex
-        })
-      })
-    })
+const transformColorMap = (colorMap: Record<string, string>) => {
+  return Object.entries(colorMap).map(([key, hex]) => {
+    const { r, g, b } = hexToRgb(hex)
+    return {
+      hex,
+      r,
+      g,
+      b,
+    }
   })
-  return rgbs
 }
 
 export const computeIndizes = (
@@ -50,7 +44,8 @@ export const computeIndizes = (
     imageDimensions.dh
   )
   const data = imageData.data
-  const rgbs = getRGBs(colorMap)
+  const colorMapRGB = transformColorMap(colorMap)
+  const colorMapCache: Record<string, string> = {}
 
   let localIndizes: {
     index: number
@@ -66,14 +61,27 @@ export const computeIndizes = (
       console.log(i)
     }
 
-    const matchingHex = rgbs[`${r}-${g}-${b}`]
+    if (colorMapCache[`${r}-${g}-${b}`]) {
+      localIndizes.push({
+        index: i,
+        hex: colorMapCache[`${r}-${g}-${b}`],
+      })
+      continue
+    }
+
+    const matchingHex = colorMapRGB.find(
+      ({ r: r2, g: g2, b: b2 }) =>
+        isInRange(r, r2) && isInRange(g, g2) && isInRange(b, b2)
+    )
 
     if (matchingHex) {
       localIndizes.push({
         index: i,
-        hex: matchingHex,
+        hex: matchingHex.hex,
       })
+      colorMapCache[`${r}-${g}-${b}`] = matchingHex.hex
     }
   }
+  console.log("localIndizes", localIndizes.length)
   return localIndizes
 }
