@@ -12,14 +12,14 @@ import { ScrollArea } from "./ui/scroll-area"
 type Props = {
   template: TemplateMeta
   canvasDataUrl: string | null
-  colorMap: Record<string, string>
+  _colorMap: Record<string, string>
   setColorMap: Dispatch<SetStateAction<Record<string, string>>>
 }
 
 export const Pickers = ({
   template,
   canvasDataUrl,
-  colorMap,
+  _colorMap: colorMap,
   setColorMap,
 }: Props) => {
   const download = () => {

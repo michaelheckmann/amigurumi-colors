@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react"
+import { useThrottle } from "@uidotdev/usehooks"
 
 import { Template } from "@/types/templates"
 import { File } from "@/components/file"
@@ -23,7 +24,8 @@ type Props = {
 
 export const Body = ({ template }: Props) => {
   const [canvasDataUrl, setCanvasDataUrl] = useState<string | null>(null)
-  const [colorMap, setColorMap] = useState<Record<string, string>>({})
+  const [_colorMap, setColorMap] = useState<Record<string, string>>({})
+  const colorMap = useThrottle(_colorMap, 200)
 
   useEffect(() => {
     setColorMap(getDefaultMap(template))
@@ -44,7 +46,7 @@ export const Body = ({ template }: Props) => {
         <File {...{ template, colorMap, setCanvasDataUrl }} />
       </div>
       <div className="min-w-[16em]">
-        <Pickers {...{ template, canvasDataUrl, colorMap, setColorMap }} />
+        <Pickers {...{ template, canvasDataUrl, _colorMap, setColorMap }} />
       </div>
     </section>
   )

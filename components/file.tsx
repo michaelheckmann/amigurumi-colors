@@ -40,6 +40,9 @@ const FileComponent = ({ template, colorMap, setCanvasDataUrl }: Props) => {
     const data = imageData.data
     for (const { index, hex } of indizes) {
       const replacedHex = colorMap[hex]
+      if (!replacedHex) {
+        continue
+      }
       const { r, g, b } = hexToRgb(replacedHex)
       data[index] = r
       data[index + 1] = g

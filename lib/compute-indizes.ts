@@ -58,7 +58,7 @@ export const computeIndizes = (
     const b = data[i + 2]
 
     if (i % 100000 === 0) {
-      console.log(i)
+      // console.log(i)
     }
 
     if (colorMapCache[`${r}-${g}-${b}`]) {
