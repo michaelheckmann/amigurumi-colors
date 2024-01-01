@@ -16,8 +16,14 @@ export const getSession = async (): Promise<boolean> => {
       })) as string)
     : null
 
-  const data = (session ? JSON.parse(session) : null) as { code: string } | null
-  return data?.code === authPassword
+  try {
+    const data = (session ? JSON.parse(session) : null) as {
+      code: string
+    } | null
+    return data?.code === authPassword
+  } catch (error) {
+    return false
+  }
 }
 
 export const setSession = async (code: string): Promise<void> => {
