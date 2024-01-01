@@ -24,7 +24,7 @@ export const Pickers = ({
 }: Props) => {
   const download = () => {
     const link = document.createElement("a")
-    link.download = `${template.name}.png`
+    link.download = `${template.project}.png`
     link.href = canvasDataUrl ?? ""
     link.click()
   }

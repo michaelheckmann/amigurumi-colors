@@ -4,11 +4,11 @@ import { useEffect, useState } from "react"
 
 import { TemplateMeta } from "@/types/templates"
 
-const MAKE_REQUEST = false && process.env.NODE_ENV === "development"
+const MAKE_REQUEST = true && process.env.NODE_ENV === "development"
 
 const DUMMY_DATA: TemplateMeta[] = [
   {
-    name: "Lupita",
+    project: "Lupita",
     image: "abe5fe00-c003-4951-9ec7-5a454e8b0dc1",
     colors: {
       Körper: "#ffff00",
@@ -26,9 +26,11 @@ export const useTemplateMetas = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const response = await fetch("/api/templates")
+      const response = await fetch("/api/templates", {
+        cache: "no-cache",
+      })
       const { data } = await response.json()
-      setTemplateMetas(data)
+      setTemplateMetas(data.filter((d: TemplateMeta) => d.image))
     }
 
     if (process.env.NODE_ENV !== "development" || MAKE_REQUEST) {

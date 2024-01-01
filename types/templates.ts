@@ -1,5 +1,5 @@
 export type TemplateMeta = {
-  name: string
+  project: string
   image: string
   colors: {
     [key: string]: string

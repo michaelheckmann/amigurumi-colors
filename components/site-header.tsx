@@ -25,7 +25,7 @@ const SiteHeaderComponent = ({ setSelectedTemplate, setIsLoading }: Props) => {
 
   const handleSelect = async (templateName: string) => {
     setIsLoading(true)
-    const template = templates?.find((t) => t.name === templateName)
+    const template = templates?.find((t) => t.project === templateName)
     if (!template) {
       setSelectedTemplate(null)
       setIsLoading(false)
@@ -44,13 +44,13 @@ const SiteHeaderComponent = ({ setSelectedTemplate, setIsLoading }: Props) => {
       <div className="container flex items-center justify-between h-16 space-x-4 sm:space-x-0">
         <Logo />
         <Select onValueChange={handleSelect}>
-          <SelectTrigger className="w-[200px]">
+          <SelectTrigger className="w-[200px]" disabled={!templates?.length}>
             <SelectValue placeholder="Wähle ein Template" />
           </SelectTrigger>
           <SelectContent>
-            {(templates ?? []).map(({ name }) => (
-              <SelectItem key={name} value={name}>
-                {name}
+            {(templates ?? []).map(({ project }) => (
+              <SelectItem key={project} value={project}>
+                {project}
               </SelectItem>
             ))}
           </SelectContent>

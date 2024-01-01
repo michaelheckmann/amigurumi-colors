@@ -1,11 +1,14 @@
 import { NextResponse } from "next/server"
+import postgres from "postgres"
 
 export async function GET() {
   try {
-    const response = await fetch(`${process.env.TEMPLATES_URL}`, {
-      next: { revalidate: 3600 },
-    })
-    const { data } = await response.json()
+    const connectionString = process.env.DB_URL
+    if (!connectionString) {
+      throw new Error("no connection string")
+    }
+    const sql = postgres(connectionString)
+    const data = await sql`SELECT * FROM amigurumi_colors`
     return NextResponse.json(
       {
         data,

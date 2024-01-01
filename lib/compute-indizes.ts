@@ -4,7 +4,7 @@ import { ImageDimensions } from "@/types/canvas"
 
 import { hexToRgb } from "./hex-to-rgb"
 
-const THRESHOLD = 150
+const THRESHOLD = 50
 
 const isInRange = (a: number, b: number) => {
   return Math.abs(a - b) < THRESHOLD
@@ -36,7 +36,7 @@ export const computeIndizes = (
     console.log("failed to get context")
     return []
   }
-
+  console.log(imageDimensions)
   const imageData = ctx.getImageData(
     imageDimensions.dx,
     imageDimensions.dy,
