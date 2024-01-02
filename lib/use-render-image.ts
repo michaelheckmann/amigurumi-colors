@@ -22,7 +22,7 @@ const drawImageScaled = (
   // Calculate the new x and y coordinates to center the image
   const newX = Math.floor(centerShift_x)
   const newY = Math.floor(centerShift_y)
-
+  ctx.imageSmoothingEnabled = false
   ctx.drawImage(
     img,
     0,
@@ -47,7 +47,7 @@ const drawImageScaled = (
   }
 }
 
-export const useRenderImage = (image: HTMLImageElement, threshold: number) => {
+export const useRenderImage = (image: HTMLImageElement) => {
   const canvas = useRef<HTMLCanvasElement | null>(null)
   const [imageDimensions, setImageDimensions] =
     useState<ImageDimensions | null>(null)
@@ -80,7 +80,7 @@ export const useRenderImage = (image: HTMLImageElement, threshold: number) => {
     if (canvas.current && image && debouncedSize) {
       draw()
     }
-  }, [image, draw, debouncedSize, threshold])
+  }, [image, draw, debouncedSize])
 
   return {
     canvas,

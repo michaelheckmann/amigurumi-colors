@@ -11,23 +11,14 @@ type Props = {
   template: Template
   colorMap: Record<string, string>
   setCanvasDataUrl: (dataUrl: string | null) => void
-  threshold: number
 }
 
-const FileComponent = ({
-  template,
-  colorMap,
-  setCanvasDataUrl,
-  threshold,
-}: Props) => {
-  const { canvas, imageDimensions } = useRenderImage(
-    template.imageElement,
-    threshold
-  )
+const FileComponent = ({ template, colorMap, setCanvasDataUrl }: Props) => {
+  const { canvas, imageDimensions } = useRenderImage(template.imageElement)
 
   const indizes = useMemo(() => {
-    return computeIndizes(canvas, imageDimensions, template.colors, threshold)
-  }, [canvas, imageDimensions, template, threshold])
+    return computeIndizes(canvas, imageDimensions, template.colors)
+  }, [canvas, imageDimensions, template])
 
   useEffect(() => {
     if (!imageDimensions) {

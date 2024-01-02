@@ -12,7 +12,8 @@
     "typecheck": "tsc --noEmit",
     "format:write": "prettier --write \"**/*.{ts,tsx,mdx}\" --cache",
     "format:check": "prettier --check \"**/*.{ts,tsx,mdx}\" --cache",
-    "ts-node": "ts-node"
+    "ts-node": "ts-node",
+    "process": "ts-node ./scripts/limit-colors.ts"
   },
   "dependencies": {
     "@radix-ui/react-label": "^2.0.2",

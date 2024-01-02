@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import { useDebounce, useThrottle } from "@uidotdev/usehooks"
+import { useThrottle } from "@uidotdev/usehooks"
 
 import { Template } from "@/types/templates"
 import { File } from "@/components/file"
@@ -25,9 +25,7 @@ type Props = {
 export const Body = ({ template }: Props) => {
   const [canvasDataUrl, setCanvasDataUrl] = useState<string | null>(null)
   const [_colorMap, setColorMap] = useState<Record<string, string>>({})
-  const colorMap = useThrottle(_colorMap, 200)
-  const [_threshold, setThreshold] = useState<number>(20)
-  const threshold = useDebounce(_threshold, 200)
+  const colorMap = useThrottle(_colorMap, 100)
 
   useEffect(() => {
     setColorMap(getDefaultMap(template))
@@ -45,7 +43,7 @@ export const Body = ({ template }: Props) => {
   return (
     <section className="container flex justify-between gap-4 py-4 md:gap-16 lg:gap-32 content-area">
       <div className="flex-1">
-        <File {...{ template, colorMap, setCanvasDataUrl, threshold }} />
+        <File {...{ template, colorMap, setCanvasDataUrl }} />
       </div>
       <div className="min-w-[16em]">
         <Pickers
@@ -54,8 +52,6 @@ export const Body = ({ template }: Props) => {
             canvasDataUrl,
             _colorMap,
             setColorMap,
-            _threshold,
-            setThreshold,
           }}
         />
       </div>
