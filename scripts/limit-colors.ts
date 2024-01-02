@@ -37,11 +37,20 @@ const main = async () => {
   rl.question("Please enter a file path: ", async (filePath) => {
     if (!filePath) {
       console.log("no file path given")
-      return
+      process.exit(1)
     }
+
+    if (filePath.startsWith('"') || filePath.startsWith("'")) {
+      filePath = filePath.slice(1)
+    }
+
+    if (filePath.endsWith('"') || filePath.endsWith("'")) {
+      filePath = filePath.slice(0, -1)
+    }
+
     if (!filePath.endsWith("-original.png")) {
       console.log("file path must end with -original.png")
-      return
+      process.exit(1)
     }
 
     const img = await jimp.read(filePath)
@@ -62,7 +71,9 @@ const main = async () => {
       }
     })
 
-    img.write(filePath.replace("-original.png", ".png"))
+    img.write(filePath.replace("-original.png", ".png"), () => {
+      process.exit(0)
+    })
   })
 }
 

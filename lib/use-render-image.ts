@@ -47,7 +47,7 @@ const drawImageScaled = (
   }
 }
 
-export const useRenderImage = (image: HTMLImageElement) => {
+export const useRenderImage = (image: HTMLImageElement, threshold: number) => {
   const canvas = useRef<HTMLCanvasElement | null>(null)
   const [imageDimensions, setImageDimensions] =
     useState<ImageDimensions | null>(null)
@@ -80,7 +80,7 @@ export const useRenderImage = (image: HTMLImageElement) => {
     if (canvas.current && image && debouncedSize) {
       draw()
     }
-  }, [image, draw, debouncedSize])
+  }, [image, draw, debouncedSize, threshold])
 
   return {
     canvas,

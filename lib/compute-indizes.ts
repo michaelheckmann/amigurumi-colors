@@ -4,10 +4,8 @@ import { ImageDimensions } from "@/types/canvas"
 
 import { hexToRgb } from "./hex-to-rgb"
 
-const THRESHOLD = 50
-
-const isInRange = (a: number, b: number) => {
-  return Math.abs(a - b) < THRESHOLD
+const isInRange = (a: number, b: number, threshold: number) => {
+  return Math.abs(a - b) < threshold
 }
 
 const transformColorMap = (colorMap: Record<string, string>) => {
@@ -25,7 +23,8 @@ const transformColorMap = (colorMap: Record<string, string>) => {
 export const computeIndizes = (
   canvas: MutableRefObject<HTMLCanvasElement | null>,
   imageDimensions: ImageDimensions | null,
-  colorMap: Record<string, string>
+  colorMap: Record<string, string>,
+  threshold: number
 ) => {
   if (!imageDimensions || !canvas.current) {
     return []
@@ -71,7 +70,9 @@ export const computeIndizes = (
 
     const matchingHex = colorMapRGB.find(
       ({ r: r2, g: g2, b: b2 }) =>
-        isInRange(r, r2) && isInRange(g, g2) && isInRange(b, b2)
+        isInRange(r, r2, threshold) &&
+        isInRange(g, g2, threshold) &&
+        isInRange(b, b2, threshold)
     )
 
     if (matchingHex) {
@@ -82,6 +83,6 @@ export const computeIndizes = (
       colorMapCache[`${r}-${g}-${b}`] = matchingHex.hex
     }
   }
-  console.log("localIndizes", localIndizes.length)
+  // console.log("localIndizes", localIndizes.length)
   return localIndizes
 }

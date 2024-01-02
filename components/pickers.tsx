@@ -8,12 +8,15 @@ import { Button } from "./ui/button"
 import { Input } from "./ui/input"
 import { Label } from "./ui/label"
 import { ScrollArea } from "./ui/scroll-area"
+import { Slider } from "./ui/slider"
 
 type Props = {
   template: TemplateMeta
   canvasDataUrl: string | null
   _colorMap: Record<string, string>
   setColorMap: Dispatch<SetStateAction<Record<string, string>>>
+  _threshold: number
+  setThreshold: Dispatch<SetStateAction<number>>
 }
 
 export const Pickers = ({
@@ -21,6 +24,8 @@ export const Pickers = ({
   canvasDataUrl,
   _colorMap: colorMap,
   setColorMap,
+  _threshold,
+  setThreshold,
 }: Props) => {
   const download = () => {
     const link = document.createElement("a")
@@ -37,6 +42,15 @@ export const Pickers = ({
     <div className="flex flex-col justify-between h-full gap-8">
       <ScrollArea>
         <div className="flex flex-col gap-8 pb-4">
+          <div className="flex flex-col gap-4">
+            <Label>Schwellenwert</Label>
+            <Slider
+              min={0}
+              max={200}
+              value={[_threshold]}
+              onValueChange={(v) => setThreshold(v[0])}
+            />
+          </div>
           {Object.entries(template.colors).map(([key, value]) => (
             <div key={key} className="w-full">
               <Label id={key}>{key}</Label>
