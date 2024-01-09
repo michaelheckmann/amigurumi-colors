@@ -10,7 +10,17 @@ export async function GET() {
       throw new Error("no connection string")
     }
     const sql = postgres(connectionString)
-    const data = await sql`SELECT * FROM colours`
+    const data = await sql`
+    SELECT
+      colours.id,
+      colour_name,
+      colour_group,
+      hex,
+      brand,
+      product_line
+    FROM colours
+    JOIN yarns ON colours.yarn = yarns.id
+    `
     return NextResponse.json(
       {
         data,

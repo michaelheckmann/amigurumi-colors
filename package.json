@@ -16,7 +16,9 @@
     "process": "ts-node ./scripts/limit-colors.ts"
   },
   "dependencies": {
+    "@radix-ui/react-dialog": "^1.0.5",
     "@radix-ui/react-label": "^2.0.2",
+    "@radix-ui/react-popover": "^1.0.7",
     "@radix-ui/react-scroll-area": "^1.0.5",
     "@radix-ui/react-select": "^2.0.0",
     "@radix-ui/react-slider": "^1.1.2",
@@ -25,6 +27,7 @@
     "axios": "^1.6.4",
     "class-variance-authority": "^0.4.0",
     "clsx": "^1.2.1",
+    "cmdk": "^0.2.0",
     "csv-parser": "^3.0.0",
     "fast-average-color-node": "^2.7.0",
     "iron-session": "^8.0.1",

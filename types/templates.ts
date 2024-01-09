@@ -4,6 +4,9 @@ export type TemplateMeta = {
   colors: {
     [key: string]: string
   }
+  default_colors: {
+    [key: string]: number
+  }
 }
 
 export type TemplateImage = {
@@ -18,4 +21,13 @@ export type TemplateImage = {
 
 export type Template = TemplateMeta & {
   imageElement: HTMLImageElement
+}
+
+export type Yarn = {
+  id: number
+  colour_name: string
+  colour_group: string
+  hex: string
+  brand: string
+  product_line: string
 }

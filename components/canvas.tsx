@@ -4,16 +4,19 @@ import React, { useEffect, useMemo } from "react"
 
 import { Template } from "@/types/templates"
 import { computeIndizes } from "@/lib/compute-indizes"
+import { useColorMapContext } from "@/lib/context/use-color-map-context"
+import { useTemplateContext } from "@/lib/context/use-template-context"
 import { hexToRgb } from "@/lib/hex-to-rgb"
-import { useRenderImage } from "@/lib/use-render-image"
+import { useRenderImage } from "@/lib/hooks/use-render-image"
 
 type Props = {
   template: Template
-  colorMap: Record<string, string>
-  setCanvasDataUrl: (dataUrl: string | null) => void
 }
 
-const FileComponent = ({ template, colorMap, setCanvasDataUrl }: Props) => {
+const CanvasComponent = ({ template }: Props) => {
+  const { setCanvasDataUrl } = useTemplateContext()
+  const { colorMap } = useColorMapContext()
+
   const { canvas, imageDimensions } = useRenderImage(template.imageElement)
 
   const indizes = useMemo(() => {
@@ -43,7 +46,7 @@ const FileComponent = ({ template, colorMap, setCanvasDataUrl }: Props) => {
       if (!replacedHex) {
         continue
       }
-      const { r, g, b } = hexToRgb(replacedHex)
+      const { r, g, b } = hexToRgb(replacedHex.hex)
       data[index] = r
       data[index + 1] = g
       data[index + 2] = b
@@ -56,4 +59,4 @@ const FileComponent = ({ template, colorMap, setCanvasDataUrl }: Props) => {
   return <canvas ref={canvas} className="w-full h-full"></canvas>
 }
 
-export const File = React.memo(FileComponent)
+export const Canvas = React.memo(CanvasComponent)
