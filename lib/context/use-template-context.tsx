@@ -1,4 +1,4 @@
-import React, { createContext, useCallback, useContext, useState } from "react"
+import React, { createContext, useContext, useState } from "react"
 
 import { Template } from "@/types/templates"
 
@@ -6,7 +6,7 @@ import { Template } from "@/types/templates"
 interface TemplateContextData {
   template: Template | null
   setTemplate: (template: Template | null) => void
-  download: () => void
+  canvasDataUrl: string | null
   setCanvasDataUrl: (canvasDataUrl: string | null) => void
   isLoading: boolean
   setIsLoading: (isLoading: boolean) => void
@@ -37,20 +37,13 @@ export function TemplateContextProvider({
   const [canvasDataUrl, setCanvasDataUrl] = useState<string | null>(null)
   const [isLoading, setIsLoading] = useState(false)
 
-  const download = useCallback(() => {
-    const link = document.createElement("a")
-    link.download = `${template?.project ?? "Amigurumi Colors"}.png`
-    link.href = canvasDataUrl ?? ""
-    link.click()
-  }, [canvasDataUrl, template])
-
   // Provide the context value to the children
   return (
     <TemplateContext.Provider
       value={{
         template,
         setTemplate,
-        download,
+        canvasDataUrl,
         setCanvasDataUrl,
         isLoading,
         setIsLoading,

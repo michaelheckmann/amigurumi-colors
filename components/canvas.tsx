@@ -53,7 +53,17 @@ const CanvasComponent = ({ template }: Props) => {
     }
 
     ctx.putImageData(imageData, imageDimensions.dx, imageDimensions.dy)
-    setCanvasDataUrl(canvas.current?.toDataURL("image/png") ?? null)
+
+    // Create a new canvas to hold the cropped image
+    const croppedCanvas = document.createElement("canvas")
+    croppedCanvas.width = imageDimensions.dw
+    croppedCanvas.height = imageDimensions.dh
+    const croppedCtx = croppedCanvas.getContext("2d")
+
+    // Draw the image data onto the new canvas
+    croppedCtx?.putImageData(imageData, 0, 0)
+
+    setCanvasDataUrl(croppedCanvas.toDataURL("image/png") ?? null)
   }, [colorMap, imageDimensions, canvas, setCanvasDataUrl, indizes])
 
   return <canvas ref={canvas} className="w-full h-full"></canvas>

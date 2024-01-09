@@ -69,14 +69,17 @@ export function ColorMapContextProvider({
         (acc, [colorKey, colorMapValue]) => {
           return {
             ...acc,
-            [colorKey]: colorMapValue,
+            [colorKey]: {
+              ...colorMapValue,
+              colorKey: _colorMap[colorKey]?.colorKey,
+            },
           }
         },
         {} as Record<string, ColorMapValue>
       )
       setColorMap(map)
     },
-    []
+    [_colorMap]
   )
 
   return (
